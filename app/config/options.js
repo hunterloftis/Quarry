@@ -6,12 +6,12 @@ exports = module.exports = function(env) {
 
   var option_tables = {
     development: function() {
-      this.appTitle = 'Node Boilerplate';
-      this.appname = 'boilerplate2';
+      this.appTitle = 'Quarry';
+      this.appname = 'quarry';
       this.maxAge = TWO_WEEKS;
       this.shortSession = TWO_WEEKS;
       this.reqTimeout = 30000;
-      this.sessionKey = 'b0ilerplate2';
+      this.sessionKey = 'qu@rry';
       this.host = 'http://localhost';
       this.port = 80;
       this.dumpExceptions = true;

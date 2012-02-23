@@ -1,3 +1,79 @@
+.quarry {
+  padding: 0;
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  top: 50px;
+  border-bottom: 20px solid #2c2c2c;
+  overflow: auto;
+}
+ul.stack {
+  vertical-align: bottom;
+  overflow: auto;
+  white-space: nowrap;
+  margin: 0;
+  padding: 100% 20px 10px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -10px;
+}
+ul.stack > li {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: bottom;
+}
+ul.stack > li ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  white-space: normal;
+}
+ul.stack > li ul li {
+  margin: 10px 10px 0px;
+  padding: 10px;
+  width: 100px;
+  height: 50px;
+  border: 2px solid #999;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  background: #e1f2f5;
+  text-align: center;
+}
+ul.stack > li ul li:hover {
+  cursor: pointer;
+  background: #555;
+  color: #eee;
+}
+ul.stack > li ul li:last-child {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+ul.stack > li ul li:last-child.addnew {
+  display: block;
+}
+ul.stack > li ul:hover li.addnew {
+  display: block;
+}
+ul.stack > li ul li.addnew {
+  background: none;
+  border: 2px dashed #999;
+  position: relative;
+  display: none;
+}
+ul.stack > li ul li.addnew:after {
+  content: "+";
+  font-size: 70px;
+  position: relative;
+  top: 8px;
+  color: #999;
+  font-weight: bold;
+}
 @media (min-width: 980px) {
   body {
     padding-top: 60px;

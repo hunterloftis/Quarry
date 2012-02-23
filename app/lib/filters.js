@@ -15,7 +15,7 @@ module.exports = {
   },
   require_not_user: function(req, res, next) {
     if (!req.currentUser) return next();
-    return res.redirect(server.dynamicViewHelpers.account_route(req));
+    return res.redirect(server.dynamicViewHelpers.stacks_route(req));
   },
   is_user: function(req, res, next) {
     if (req.currentUser) req.is_user = true;

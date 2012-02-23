@@ -6,7 +6,8 @@ exports = module.exports = function() {
       var map = {
         'login': '/sessions/login',
         'logout': '/sessions/logout',
-        'register': '/users/new'
+        'register': '/users/new',
+        'stacks': '/stacks'
       };
       return (map[action] ? map[action] : '');
     },
@@ -83,6 +84,12 @@ exports = module.exports = function() {
     account_route: function(req, res) {
       if (req.currentUser) {
         return '/users/' + req.currentUser._id;
+      }
+      return '/';
+    },
+    stacks_route: function(req, res) {
+      if (req.currentUser) {
+        return '/stacks';
       }
       return '/';
     }

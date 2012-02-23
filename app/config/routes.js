@@ -14,4 +14,7 @@ exports = module.exports = function() {
   server.resource('users', controllers.user)
     .map('post', '/docs', 'doc');
 
+  // Stacks
+  server.resource('stacks', controllers.stacks);
+
 };
