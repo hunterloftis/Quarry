@@ -1,7 +1,55 @@
 extends ../layouts/layout
 
 block subject
-  h1 All systems go!
 
 block content
-  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  .world.resizable_column
+    ul.quarry
+      li.stack
+        ul
+          li.addnew(data-bind="click:prependNewStackFromFeature, visible:$root.adding_new_feature")
+      // ko foreach: stacks
+      li.stack
+        ul
+          li.addnew(data-bind="click:addNewFeature, visible:$root.adding_new_feature")
+          // ko foreach: {data:features, beforeRemove:animateRemovingFeature}
+          li.feature(data-bind="click:click, css:{active:is_active_feature, double:width() > 1}")
+            span(data-bind="text:name")
+          // /ko
+      // /ko
+      li.stack
+        ul
+          li.addnew(data-bind="click:appendNewStackFromFeature, visible:$root.adding_new_feature")
+  .details.resizable_column
+    h1(data-bind="text:active_feature.name")
+
+  
+append scripts
+  script
+    function guidGenerator() {
+      var S4 = function() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+      };
+      return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
+
+  script(src="/js/viewmodels/quarryVM.js")
+  script(src="/js/viewmodels/stackVM.js")
+  script(src="/js/viewmodels/featureVM.js")
+
+  script
+    var QuarryVM = new Quarry();
+    
+    $(function(){
+      QuarryVM.loadStacks();
+      ko.applyBindings(QuarryVM);
+      $("ul.quarry").scrollTop(100000);
+      $(".world").click(function(){
+        QuarryVM.active_feature({});
+      })
+    })
+
+  //.tools
+  //  .tool(data-bind="click:increaseWidth")
+  //  .tool(data-bind="click:$parent.addNewFeature")
+  //  .tool.delete(data-bind="click:$parent.removeFeature.bind($parent)")

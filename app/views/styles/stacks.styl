@@ -1,62 +1,121 @@
-.quarry
+feature_width = 150px
+
+.details
+  display none
+.world
+  background two-stop-position(#fefefe, #888, 100%)
   padding 0
   position fixed
   bottom 0px
   left 0
   right 0
   top 50px
-  border-bottom 20px solid #2c2c2c
-  overflow auto
+  z-index -1
 
-ul.stack
+ul.quarry
   vertical-align bottom
   overflow auto
+  -webkit-overflow-scrolling touch
   white-space nowrap
   margin 0
-  padding 100% 20px 10px
+  padding 100px 100px 0
   position absolute
-  right 0
+  bottom 0px
   left 0
-  bottom -10px
-  > li
+  right 0
+  max-height 98%
+  text-align center
+  li.stack
     inline-block()
     vertical-align bottom
+    bottom 0
     ul
-      margin 0
-      padding 0
+      margin 0 auto
+      padding 50px 0 0
       list-style-type none
       white-space normal
       li
-        margin 10px 10px 0px
-        padding 10px
-        width 100px
+        transition all .2s ease-in-out
+        margin 5px
+        padding 5px
+        width feature_width
         height 50px
-        border 2px solid #999
-        border-radius 2px
-        background #e1f2f5
-        text-align center
-        &:hover
-          cursor pointer
-          background #555
-          color #eee
+        border 2px solid #777
+        border-radius 3px
+        background #2e2e2e
+        color #ccc
+        text-align left
+        position relative
+        &.feature
+          animation pop 250ms ease-out
+          transform-origin 50%
+          &:hover
+            background #ccc
+            color #333
+            cursor pointer
+            z-index 999
+          &.double
+            width (feature_width * 2)
+          &.active
+            z-index 999
+            box-shadow 0 0 25px -5px #000
+            background #ddd
+            color #111
+            &.removing
+              .tools  
+                display none
+        &.removing
+          height 0
+          padding-top 0
+          padding-bottom 0
+          border none
+          textarea, .tools
+            display none
         &:last-child
           font-weight bold
           margin-bottom 2px
-          &.addnew
-            display block
-      &:hover
-        li.addnew
-          display block
-      li.addnew
-        background none
-        border 2px dashed #999
-        position relative
-        display none
-        &:after
-          content "+"
-          font-size 70px
+        .tools
+          transition(all .3s ease-in-out)
+          width 100%
+          height 0
           position relative
-          top 8px
-          color #999
+          opacity 0
+          text-align center
+          .tool
+            transition(all .3s ease-in-out)
+            background #ccc
+            border 2px solid #333
+            border-radius 50px
+            inline-block()
+            width 10px
+            height 10px
+            margin 0 3%
+        .delete
+          background #333
+          color #eee
+          font-size 30px
+          cursor pointer
+          font-weight normal
+      li.addnew
+        transition(all .5s ease-in-out)
+        background none
+        border 2px dashed #bbb
+        color #bbb
+        position relative
+        z-index 1
+        &:hover
+          cursor pointer
+          border-color #933
+          color #933
+        &:after
+          transition(all .2s ease-in-out)
+          content "+"
+          font-size 90px
+          position absolute
+          top 10px
+          right 0
+          bottom 0
+          left 0
           font-weight bold
+          text-align center
 

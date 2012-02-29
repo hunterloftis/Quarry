@@ -1,36 +1,18 @@
-#navbar
-  position absolute
-  top 0
-  left 0
-  right 0
-  background-color #000
-  color #fff
-  font-size 0.9em
-  line-height 0.9em
-  text-align right
-
-  h1
-    position absolute
-    font-size 1.1em
-    display block
-    margin 0
-    padding 0.7em 0
-
-    a
-      color #fff
-      text-decoration none
-
-  ul.menu
-    display inline-block
-
-    .label
-      padding-left 15px
-
-    a
-      color #bbb
-      text-decoration none
-      display inline-block
-      padding 0.9em 15px
-
-      &:hover
-        background-color #333
+.navbar-fixed-top .navbar-inner
+  background url('/images/header_band.png')
+  height 40px
+  padding 0
+  color #ccc
+  box-shadow 0 0 10px #000
+  .container
+    width 90%
+  .branding
+    color #999
+    font-weight bold
+  
+@media (max-width: 980px)
+  .nav
+    background #111
+    border-radius 0 0 10px 10px
+    color #ccc
+    padding-bottom 5px

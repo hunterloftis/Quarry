@@ -2,14 +2,22 @@
 html
   head
     meta(charset="utf-8")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+
     title
       block title
         | Quarry - Keeping your features stacked.
     block styles
+      link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Allura|Shadows+Into+Light+Two' )
       link(rel='stylesheet', href='/styles/normalize.css' )
       link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css' )
       link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.responsive.css' )
       link(rel='stylesheet', href='/styles/global.css' )
+
+      link(rel="stylesheet", media="screen and (max-device-width: 480px)", href='/styles/iphone.css')
+      link(rel="stylesheet", media="screen and (min-device-width: 768px) and (max-device-width: 1024px)", href='/styles/ipad.css')
 
 body(class = (is_logged_in) ? "logged-in" : "not-logged-in")
 
@@ -28,4 +36,11 @@ body(class = (is_logged_in) ? "logged-in" : "not-logged-in")
 
   block scripts
     script(src='/js/lib/jquery-1.7.1.min.js')
+    script(src='/js/lib/amplify.min.js')
+    script(src='/js/lib/knockout-2.0.0.js')
+    script(src='/js/lib/underscore.js')
+    script(src='/js/lib/fastclick.js')
+    script(src='/js/lib/jquery.stayInWebApp.min.js')
     script(src='/vendor/bootstrap/js/bootstrap.min.js')
+    script
+      new FastClick(document.body);
