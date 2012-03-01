@@ -3,53 +3,70 @@ extends ../layouts/layout
 block subject
 
 block content
-  .world.resizable_column
+  .world
     ul.quarry
       li.stack
         ul
-          li.addnew(data-bind="click:prependNewStackFromFeature, visible:$root.adding_new_feature")
-      // ko foreach: stacks
-      li.stack
-        ul
-          li.addnew(data-bind="click:addNewFeature, visible:$root.adding_new_feature")
-          // ko foreach: {data:features, beforeRemove:animateRemovingFeature}
-          li.feature(data-bind="click:click, css:{active:is_active_feature, double:width() > 1}")
-            span(data-bind="text:name")
-          // /ko
+          li.feature.addnew#measure(data-bind="click:prependFeatureList")
+      // ko template: {foreach:features, name:'feature_stack'}
       // /ko
       li.stack
         ul
-          li.addnew(data-bind="click:appendNewStackFromFeature, visible:$root.adding_new_feature")
-  .details.resizable_column
-    h1(data-bind="text:active_feature.name")
-
+          li.feature.addnew(data-bind="click:appendFeatureList")
+  .feature_details(data-bind="css:{open:has_active_feature}")
+    .inner(data-bind="with: active_feature_details")
+      section
+        h2 Task Name
+        input(data-bind="value:name, valueUpdate: 'afterkeydown'")
+      section
+        h2 Dependant Tasks
+        button(data-bind="click:addNewDependant") Add Dependant Task
+        ul.inset_list(data-bind="foreach:dependants")
+          li(data-bind="text:name")
+      section
+        h2 Properties
+      section
+        button(data-bind="click:$parent.removeFeature.bind($parent)") Delete Task
   
-append scripts
-  script
-    function guidGenerator() {
-      var S4 = function() {
-        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-      };
-      return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-    }
 
+  script#feature_stack(type="text/html")
+    li.stack
+      ul
+        // ko template: {foreach:dependants, name:'feature_block'}
+        // /ko
+        li.feature(data-bind="click:click, css:{active:is_active_feature}, style:{width:elem_width}")
+          span(data-bind="text:name")
+          span &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+          span(data-bind="text:width")
+
+
+  script#feature_block(type="text/html")
+    li.stack
+      ul
+        // ko template: {foreach:dependants, name:'feature_block'}
+        // /ko
+        li.feature(data-bind="click:click, css:{active:is_active_feature}, style:{width:elem_width}")
+          span(data-bind="text:name")
+          span &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+          span(data-bind="text:width")
+  
+
+append scripts
   script(src="/js/viewmodels/quarryVM.js")
   script(src="/js/viewmodels/stackVM.js")
   script(src="/js/viewmodels/featureVM.js")
 
   script
+    var feature_width = $("#measure").outerWidth();
+    feature_width += parseInt($("#measure").css("margin-left"), 10)
+    
     var QuarryVM = new Quarry();
     
     $(function(){
-      QuarryVM.loadStacks();
+      QuarryVM.loadFeatures();
       ko.applyBindings(QuarryVM);
       $("ul.quarry").scrollTop(100000);
       $(".world").click(function(){
-        QuarryVM.active_feature({});
+        QuarryVM.active_feature(null);
       })
     })
-
-  //.tools
-  //  .tool(data-bind="click:increaseWidth")
-  //  .tool(data-bind="click:$parent.addNewFeature")
-  //  .tool.delete(data-bind="click:$parent.removeFeature.bind($parent)")

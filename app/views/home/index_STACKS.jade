@@ -1,0 +1,56 @@
+extends ../layouts/layout
+
+block subject
+
+block content
+  .world
+    ul.quarry
+      li.stack
+        ul
+          li.addnew(data-bind="click:prependNewStackFromFeature, visible:$root.adding_new_feature")
+      // ko foreach: stacks
+      li.stack
+        ul
+          li.addnew(data-bind="click:addNewFeature, visible:$root.adding_new_feature")
+          // ko foreach: {data:features, beforeRemove:animateRemovingFeature}
+          li.feature(data-bind="click:click, css:{active:is_active_feature, double:width() > 1}")
+            span(data-bind="text:name")
+          // /ko
+      // /ko
+      li.stack
+        ul
+          li.addnew(data-bind="click:appendNewStackFromFeature, visible:$root.adding_new_feature")
+  .feature_details(data-bind="css:{open:has_active_feature}")
+    .inner
+      h2(data-bind="text:active_feature_details().name")
+
+  
+append scripts
+  script
+    function guidGenerator() {
+      var S4 = function() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+      };
+      return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
+
+  script(src="/js/viewmodels/quarryVM.js")
+  script(src="/js/viewmodels/stackVM.js")
+  script(src="/js/viewmodels/featureVM.js")
+
+  script
+    var QuarryVM = new Quarry();
+    
+    $(function(){
+      QuarryVM.loadFeatures();
+      ko.applyBindings(QuarryVM);
+      $("ul.quarry").scrollTop(100000);
+      $(".world").click(function(){
+        QuarryVM.active_feature(null);
+      })
+    })
+
+  //.tools
+  //  .tool(data-bind="click:increaseWidth")
+  //  .tool(data-bind="click:$parent.addNewFeature")
+  //  .tool.delete(data-bind="click:$parent.removeFeature.bind($parent)")

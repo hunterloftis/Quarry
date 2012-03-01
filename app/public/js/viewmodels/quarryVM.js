@@ -3,13 +3,28 @@ function Quarry(options) {
   options = options || {};
 
   // observables
-  this.new_feature = ko.observable("");
   this.stacks = ko.observableArray([]);
-  this.active_feature = ko.observable({});
+  this.features = ko.observableArray([]);
+  this.active_feature = ko.observable(null);
+
 
   // computes
-  this.adding_new_feature = ko.computed(function() {
-    return true || this.new_feature() !== "";
+  this.has_active_feature = ko.computed(function() {
+    return this.active_feature() !== null;
+  }, this);
+
+  this.active_feature_details = ko.computed(function() {
+    if (this.has_active_feature()) {
+      return this.active_feature();
+    }
+    else {
+      return {
+        name:"",
+        dependants:[],
+        addDependant:function(){},
+        addNewDependant:function(){}
+      };
+    }
   }, this);
 
 }
@@ -18,8 +33,10 @@ function Quarry(options) {
 // prototype methods
 Quarry.prototype = {
   addStack: function(s) {
-    
     this.stacks.push(new Stack(s));
+  },
+  addFeature: function(f) {
+    this.features.push(new Feature(f));
   },
   prependNewStackFromFeature: function() {
     this.stacks.unshift(new Stack({features:[{name:this.new_feature()}]}));
@@ -31,11 +48,21 @@ Quarry.prototype = {
     this.new_feature("");
     this.saveToLocalStorage();
   },
+  prependFeatureList: function() {
+    this.features.unshift(new Feature());
+    this.saveToLocalStorage();
+  },
+  appendFeatureList: function() {
+    this.features.push(new Feature());
+    this.saveToLocalStorage();
+  },
   saveToLocalStorage: function() {
     amplify.store('quarry', ko.toJSON(this));
   },
-  clear_new_feature: function() {
-    this.new_feature("");
+  removeFeature: function(f) {
+    this.features.remove(f);
+    this.active_feature({});
+    this.saveToLocalStorage();
   },
   loadStacks: function() {
     var initial_stacks = [],
@@ -49,5 +76,25 @@ Quarry.prototype = {
     _.each(initial_stacks, function(stack) {
       self.addStack(stack);
     });
+  },
+  loadFeatures: function() {
+    var initial_features = [],
+        self = this;
+
+    if (amplify.store('quarry')) {
+      initial_features = JSON.parse(amplify.store('quarry')).features;
+    }
+
+    // load all initial features
+    _.each(initial_features, function(feature) {
+      self.addFeature(feature);
+    });
+  },
+  animateRemovingFeature: function(elem, index, item) {
+    // $(elem).slideUp(1000, function() { $(elem).remove(); });
+    $(elem).addClass("removing");
+    setTimeout(function(){
+      $(elem).remove();
+    }, 500);
   }
 };
