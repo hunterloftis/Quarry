@@ -19,10 +19,12 @@ function Quarry(options) {
     }
     else {
       return {
+        id:"",
         name:"",
         dependants:[],
         addDependant:function(){},
-        addNewDependant:function(){}
+        addNewDependant:function(){},
+        removeFeature:function(){}
       };
     }
   }, this);
@@ -32,21 +34,8 @@ function Quarry(options) {
 
 // prototype methods
 Quarry.prototype = {
-  addStack: function(s) {
-    this.stacks.push(new Stack(s));
-  },
   addFeature: function(f) {
     this.features.push(new Feature(f));
-  },
-  prependNewStackFromFeature: function() {
-    this.stacks.unshift(new Stack({features:[{name:this.new_feature()}]}));
-    this.new_feature("");
-    this.saveToLocalStorage();
-  },
-  appendNewStackFromFeature: function() {
-    this.stacks.push(new Stack({features:[{name:this.new_feature()}]}));
-    this.new_feature("");
-    this.saveToLocalStorage();
   },
   prependFeatureList: function() {
     this.features.unshift(new Feature());
@@ -60,22 +49,10 @@ Quarry.prototype = {
     amplify.store('quarry', ko.toJSON(this));
   },
   removeFeature: function(f) {
+    console.log("removing from quarryVM");
+    this.active_feature(null);
     this.features.remove(f);
-    this.active_feature({});
     this.saveToLocalStorage();
-  },
-  loadStacks: function() {
-    var initial_stacks = [],
-        self = this;
-
-    if (amplify.store('quarry')) {
-      initial_stacks = JSON.parse(amplify.store('quarry')).stacks;
-    }
-
-    // load all initial stacks
-    _.each(initial_stacks, function(stack) {
-      self.addStack(stack);
-    });
   },
   loadFeatures: function() {
     var initial_features = [],

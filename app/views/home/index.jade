@@ -13,60 +13,51 @@ block content
       li.stack
         ul
           li.feature.addnew(data-bind="click:appendFeatureList")
-  .feature_details(data-bind="css:{open:has_active_feature}")
-    .inner(data-bind="with: active_feature_details")
-      section
-        h2 Task Name
-        input(data-bind="value:name, valueUpdate: 'afterkeydown'")
-      section
-        h2 Dependant Tasks
-        button(data-bind="click:addNewDependant") Add Dependant Task
-        ul.inset_list(data-bind="foreach:dependants")
-          li(data-bind="text:name")
-      section
-        h2 Properties
-      section
-        button(data-bind="click:$parent.removeFeature.bind($parent)") Delete Task
   
 
+  //
+  // template for stacks and features
+  //
   script#feature_stack(type="text/html")
     li.stack
       ul
-        // ko template: {foreach:dependants, name:'feature_block'}
+        // ko template: {foreach:dependants, name:'feature_stack'}
         // /ko
-        li.feature(data-bind="click:click, css:{active:is_active_feature}, style:{width:elem_width}")
-          span(data-bind="text:name")
-          span &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
-          span(data-bind="text:width")
-
-
-  script#feature_block(type="text/html")
-    li.stack
-      ul
-        // ko template: {foreach:dependants, name:'feature_block'}
-        // /ko
-        li.feature(data-bind="click:click, css:{active:is_active_feature}, style:{width:elem_width}")
-          span(data-bind="text:name")
-          span &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
-          span(data-bind="text:width")
+        li.feature.pop(data-bind="click:click, css:{active:is_active_feature}, style:{width:elem_width}")
+          .name(data-bind="text:name")
+      .details(data-bind="css:{open:is_active_feature}")
+        section
+          h2 Task Name
+          input(data-bind="value:name, valueUpdate: 'afterkeydown'")
+        section
+          h2 Dependant Tasks
+          button(data-bind="click:addDependant") Add Dependant Task
+          ul.inset_list(data-bind="foreach:dependants")
+            li
+              input(data-bind="value:name, valueUpdate: 'afterkeydown'")
+        section
+          h2 Properties
+        section
+          button(data-bind="click:$parent.removeFeature.bind($parent)") Delete Task
+        section
+          button(data-bind="click:close") Close
   
 
 append scripts
   script(src="/js/viewmodels/quarryVM.js")
-  script(src="/js/viewmodels/stackVM.js")
   script(src="/js/viewmodels/featureVM.js")
 
   script
     var feature_width = $("#measure").outerWidth();
-    feature_width += parseInt($("#measure").css("margin-left"), 10)
-    
+    var feature_margin = parseInt($("#measure").css("margin-left"), 10) * 2;
+
     var QuarryVM = new Quarry();
     
     $(function(){
       QuarryVM.loadFeatures();
       ko.applyBindings(QuarryVM);
-      $("ul.quarry").scrollTop(100000);
+      $(".world").scrollTop(100000);
       $(".world").click(function(){
-        QuarryVM.active_feature(null);
+        //QuarryVM.active_feature(null);
       })
     })

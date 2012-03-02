@@ -8,6 +8,11 @@ function Feature(options) {
   this.dependants = ko.observableArray([]);
 
   // computes
+  this.is_active_feature = ko.computed(function() {
+    return QuarryVM.active_feature() && QuarryVM.active_feature().id() === this.id();
+  }, this);
+
+
   this.width = ko.computed(function(){
     
     var deps = this.dependants(),
@@ -18,18 +23,19 @@ function Feature(options) {
       return  c;
     }, starting);
 
-    return width;
+    if (this.is_active_feature()) {
+      return Math.max(width, 3);
+    }
+    else return width;
 
   }, this);
 
   this.elem_width = ko.computed(function() {
-    var width = feature_width + 6;
-    return (this.width() > 1) ? (this.width() * 210) + "px" : "200px" ;
+    var w = feature_width + feature_margin * 2;
+    return (this.width() > 1) ? (this.width() * w) + "px" : feature_width+"px" ;
   }, this);
 
-  this.is_active_feature = ko.computed(function() {
-    return QuarryVM.active_feature() === this;
-  }, this);
+  
 
   // subscribes
   this.name.subscribe(function(val) {
@@ -40,7 +46,7 @@ function Feature(options) {
   // load all initial dependants
   var self = this;
   _.each(options.dependants, function(d) {
-    self.addDependant(d);
+    self.dependants.push(new Feature(d));
   });
 
 }
@@ -48,19 +54,23 @@ function Feature(options) {
 Feature.prototype = {
   click: function(d, e) {
     e.stopPropagation();
-    if (this.is_active_feature()) QuarryVM.active_feature(null);
-    else QuarryVM.active_feature(this);
+    if (this.is_active_feature()) {
+      QuarryVM.active_feature(null);
+    }
+    else {
+      QuarryVM.active_feature(this);
+    }
   },
-  addDependant: function(d) {
-    this.dependants.push(new Feature(d));
+  close: function() {
+    QuarryVM.active_feature(null);
   },
-  addNewDependant: function() {
+  addDependant: function(d, e) {
+    e.stopPropagation();
     this.dependants.push(new Feature());
     QuarryVM.saveToLocalStorage();
   },
   removeFeature: function(f) {
     this.dependants.remove(f);
-    QuarryVM.active_feature({});
     QuarryVM.saveToLocalStorage();
   }
 };
